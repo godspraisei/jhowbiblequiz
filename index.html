@@ -2,115 +2,317 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <title>JHOW Bible Quiz Login</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Judah's House Of Worship</title>
   <link rel="stylesheet" href="style.css" />
-  <style>
-    body {
-      background-image: url(Images/JHOW.png);
-      background-color: rgba(221, 109, 29, 0.7);
-      background-size: cover;
-      background-position: center;
-      background-repeat: no-repeat;
-      height: 100vh;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      margin: 0;
-    }
-
-    .login-container {
-      background-color: rgba(255, 255, 255, 0.9);
-      padding: 30px 40px;
-      border-radius: 15px;
-      box-shadow: 0 0 20px rgba(0, 0, 0, 0.3);
-      text-align: center;
-      max-width: 400px;
-      width: 100%;
-    }
-
-    .login-container h2 {
-      margin-bottom: 20px;
-      font-weight: 600;
-      color: #333;
-    }
-
-    .login-container input[type="text"],
-    .login-container input[type="password"] {
-      width: 100%;
-      padding: 12px;
-      margin: 10px 0;
-      border-radius: 8px;
-      border: 1px solid #ccc;
-      font-size: 1rem;
-    }
-
-    .login-container input[type="submit"] {
-      width: 100%;
-      padding: 12px;
-      background-color: #007bff;
-      color: white;
-      border: none;
-      border-radius: 8px;
-      cursor: pointer;
-      font-size: 1rem;
-      font-weight: 600;
-      transition: background-color 0.3s ease;
-    }
-
-    .login-container input[type="submit"]:hover {
-      background-color: #00b345;
-    }
-
-    #error-message {
-      color: red;
-      margin-top: 15px;
-      display: none;
-      font-weight: 600;
-    }
-  </style>
 </head>
-
 <body>
-  <div class="login-container">
-    <h2>Judah's House of Worship<br />Bible Quiz</h2>
-    <form id="loginForm" autocomplete="off">
-      <input type="text" id="username" placeholder="Username" required />
-      <input type="password" id="password" placeholder="Password" required />
-      <input type="submit" value="Login" />
+  <!-- Header -->
+  <header>
+    <h1 style="display: flex; align-items: center; gap: 10px;">
+  <img src="JHOW.png" alt="JHOW Logo" style="height: 60px;">
+  JHOW
+</h1>
+    <nav>
+      <ul>
+        <li><a href="#home">Home</a></li>
+        <li><a href="#missionandvision">M & V</a></li>
+        <li><a href="#ministries">Ministries</a></li>
+        <li><a href="#events">Events</a></li>
+        <li><a href="#sermons">Media(s)</a></li>
+        <li><a href="#about">About</a></li>
+        <li><a href="#contact">Contact</a></li>
+      </ul>
+    </nav>
+  </header>
+
+  <!-- Hero Section -->
+  <section id="home" class="hero">
+    <div class="hero-content">
+      <h1>Welcome to Judah's House of Worship</h1>
+      <h2>{The Representers Of Christ}</h2>
+      <p>Building a God-fearing, Christ like and Christ minded generation, who are strong in the Word and in the Spirit.</p>
+      <a href="#events" class="btn">See Upcoming Events</a>
+    </div>
+  </section>
+
+  <!-- Placeholder Sections -->
+  <section id="missionandvision">
+    <h2>Mission & Vision</h2>
+    <h3>Mission</h3>
+    <p> > To influence our generation, turning them back to God through Jesus, as our lifestyle shows who Christ is to them</p>
+    <p> > To bring up the type of worshippers that God seeks for... John 4:23</p>
+    <h3>Vision</h3>
+    <p> > All men conform to the image of God... 2Corinthians 3:18</p>
+    <p> > Every single man on earth glorifying God through their worship</p>
+    <p> > Empowered youths preparing the way for the Master's coming</p>
+  </section>
+
+  <section id="ministries">
+    <h2>Our Ministries</h2>
+    <div class="ministries-grid">
+      <div class="ministry-card">
+        <h4>Choir/Song Ministry</h4>
+        <p>Sharing the word of God and Christ's salvaging grace through our songs and music ministrations.</p>
+      </div>
+      <div class="ministry-card">
+        <h4>Youth Leadership Ministry</h4>
+        <p>Raising Godly young people to stand strong and lead boldly.</p>
+      </div>
+      <div class="ministry-card">
+        <h4>Prayer Band</h4>
+        <p>Interceding and birthing revival through deep spiritual fire and constant fellowship with God.</p>
+      </div>
+      <div class="ministry-card">
+        <h4>Media Team</h4>
+        <p>Capturing moments, Graphics skills enhancement and sharing God's glory with the world.</p>
+      </div>
+      <div class="ministry-card">
+        <h4>Poetry/Spoken Words Ministry</h4>
+        <p>Touching the heart and soul of men through God-given divine words of wisdom and inspiration.</p>
+      </div>
+      <div class="ministry-card">
+        <h4>Evangelical Ministry</h4>
+        <p>Sharing the goodnews of God's salvation and the Gospel of Christ. Drawing men to the Kingdom of God.</p>
+      </div>
+      <div class="ministry-card">
+        <h4>Philantrophic Ministry</h4>
+        <p>Giving of money, clothing and other charitable materials to the less privileged, orphans, widows and others.</p>
+      </div>
+      <!-- Add more ministries as needed -->
+    </div>
+  </div>
+</section>
+
+  <!-- Hidden Registration Form Modal -->
+  <div id="registration-modal" class="modal hidden">
+    <div class="modal-content">
+      <span class="close-btn" id="close-modal">&times;</span>
+      <h3>Event Registration</h3>
+      <form id="registration-form">
+        <input type="text" name="fullname" placeholder="Full Name" required />
+        <input type="email" name="email" placeholder="Email Address" required />
+        <input type="text" name="phone" placeholder="Phone Number" required />
+        <select name="event" required>
+          <option value="">-- Select Event --</option>
+          <option value="Sunday Worship">Sunday Worship</option>
+          <option value="Youth Revival">Youth Revival</option>
+          <option value="Night of Praise">Night of Praise</option>
+        </select>
+        <button type="submit" class="btn">Submit</button>
+      </form>
+    </div>
+  </div>
+</section>
+
+  <section id="sermons">
+    <h2>Media</h2>
+<section id="sermons" class="section">
+  <div class="container">
+    <h2>Worship & other Media</h2>
+    <div class="media-grid">
+      <!-- Sample YouTube embed -->
+      <div class="media-item">
+        <iframe width="100%" height="215" src="https://www.youtube.com/embed/SAMPLE_VIDEO_ID" frameborder="0" allowfullscreen></iframe>
+        <p>Sunday Worship - May 2025</p>
+      </div>
+      
+      <!-- Sample audio -->
+      <div class="media-item">
+        <audio controls>
+          <source src="media/Adara.mp3" type="audio/mpeg">
+          Your browser does not support the audio element.
+        </audio>
+        <p>Midweek Teaching - April 2025</p>
+      </div>
+
+            <!-- Sample audio -->
+      <div class="media-item">
+        <audio controls>
+          <source src="media/no_turning_back_ii_gaise_baba_lawrence_oyor_lawrenceoyor_mp3_17770.mp3" type="audio/mpeg">
+          Your browser does not support the audio element.
+        </audio>
+        <p>Midweek Teaching - April 2025</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="about" class="section">
+  <div class="container">
+    <h2>About Judah's House Of Worship</h2>
+    <p>
+      Judah's House Of Worship (JHOW), also known as The Representers Of Christ: is a vibrant family of believers devoted to worship, prayer, the word, and a walk with God.
+      We are rooted in love, led by the Spirit, and raised by God to impact generations. Founded in 2022, Judah’s House Of Worship continues to spread the Gospel of Christ through states
+      and nations of the world: telling men of the salvaging grace of God, and his gift towards mankind. The group includes youths who are zealous and vibrant in the faith who possesses God-given
+      skills and talents; of which they utilize towards the growth of the Kingdom of Heaven. While striving to be more like Him (2Cor. 3:18), we also strive to let men know about Him. As we walk in love
+      as a family, in kindness and in holiness as He who has called us had intreated of us to be. JHOW has its base in Abuja, Nigeria. they are known as JHOW Abuja (created in 2022) they also have another branch
+      in Minna, Niger State; Nigeria - referred to as JHOW Minna (created in 2025).
+    </p>
+    <p>:</p>
+    <p>:</p>
+<h4>Head Officials</h4>
+  <p>President: God'spraise I</p>
+  <P>Vice-President: Mudiaga Effeyotah</P>
+  <p>General Secretary: Innocent Bature</p>
+    <p>:</p>
+    <p>:</p>
+<h4>JHOW Abuja Officials</h4>
+  <p>JHOW Abuja President: Innocent Bature</p>
+  <p>JHOW Abuja Vice-President: Wisdom Udekwe</p>
+  <p>JHOW Abuja General Secretary: Isaac Jimoh Samuel</p>
+    <p>:</p>
+    <p>:</p>
+<h4>JHOW Minna Officials</h4>
+  <p>JHOW Minna President:</p>
+  <p>JHOW Minna Vice-President:</p>
+  <p>JHOW Minna General Secretary:</p>
+
+  <section id="contact">
+    <h2>Contact Us</h2>
+    <p>We'd love to hear from you! For bookings and other needs that may arise, You can reach us through any of the channels below.</p>
+    
+    <div class="contact-grid">
+      <div class="contact-item">
+        <h4>📞 Phone</h4>
+        <p>+234 906 858 8724 </p>
+        <p>+234 802 754 2369 </p>
+      </div>
+      <div class="contact-item">
+        <h4>📧 Email</h4>
+        <p>judahshouseofworship@gmail.com</p>
+      </div>
+      <div class="contact-item">
+        <h4>📍 Address</h4>
+        <p>Judah's House of Worship,<br> 22 Revival Street, Ibadan, Nigeria</p>
+      </div>
+    </div>
+
+    <div class="map-box">
+      <iframe 
+        src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3914.8055888271574!2d3.891441!3d7.377535!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x1039e1e9338888e7%3A0x6bd672e63123ed14!2sIbadan%2C%20Nigeria!5e0!3m2!1sen!2sng!4v1718204600000" 
+        width="100%" 
+        height="300" 
+        style="border:0;" 
+        allowfullscreen="" 
+        loading="lazy" 
+        referrerpolicy="no-referrer-when-downgrade">
+      </iframe>
+    </div>
+  </div>
+  </section>
+
+  <section id="events" class="section" style="display: none;">
+  <div class="container">
+    <h2>Event Registration</h2>
+    <p>Register now to be part of our upcoming program!</p>
+
+    <form id="event-form">
+      <div class="form-group">
+        <label for="fullName">Full Name *</label>
+        <input type="text" id="fullName" name="fullName" required>
+      </div>
+
+      <div class="form-group">
+        <label for="email">Email Address *</label>
+        <input type="email" id="email" name="email" required>
+      </div>
+
+      <div class="form-group">
+        <label for="phone">Phone Number *</label>
+        <input type="tel" id="phone" name="phone">
+      </div>
+
+      <div class="form-group">
+        <label for="interest">What are you expecting from this event?</label>
+        <textarea id="interest" name="interest" rows="4"></textarea>
+      </div>
+
+      <button type="submit" class="btn">Register</button>
     </form>
-    <p id="error-message">Invalid username or password.</p>
+  </div>
+</section>
+  <script>
+    // Function to show/hide event registration form
+function toggleEventForm(show) {
+  document.getElementById("events").style.display = show ? "block" : "none";
+}
+
+// Example: Turn it on manually for now
+toggleEventForm(true);
+
+// Handle form submission
+document.getElementById("event-form").addEventListener("submit", function (e) {
+  e.preventDefault();
+  alert("Thank you for registering! We'll reach out soon.");
+  this.reset();
+});
+
+  </script>
+
+  <!-- Footer -->
+  <footer>
+    <p>&copy; 2025 Judah’s House Of Worship. All rights reserved.</p>
+  </footer>
+
+  <!-- Event Registration Modal -->
+  <div class="modal" id="eventModal">
+    <div class="modal-content">
+      <h3>Register for Event</h3>
+      <form id="eventForm">
+        <input type="text" name="name" placeholder="Your Name" required />
+        <input type="email" name="email" placeholder="Your Email" required />
+        <input type="tel" name="phone" placeholder="Your Phone" required />
+        <select name="event" required>
+          <option value="">-- Select Event --</option>
+          <option value="Youth Conference">Youth Conference</option>
+          <option value="Praise Night">Praise Night</option>
+          <option value="Bible Summit">Bible Summit</option>
+        </select>
+        <button type="submit" class="btn">Submit</button>
+      </form>
+    </div>
   </div>
 
   <script>
-    const users = [
-      { username: "judah", password: "smartland" },
-      { username: "jane_smith", password: "securepass456" },
-      { username: "kingdavid", password: "michelle" },
-      { username: "oluwatobi64", password: "heavenly" },
-      { username: "Godspraisei", password: "admin1234", isAdmin: true },
-    ];
+    // Modal
+    const modal = document.getElementById('eventModal');
+    const hidden = document.getElementById('hiddenLinks');
 
-    document.getElementById("loginForm").addEventListener("submit", function (event) {
-      event.preventDefault();
+    function openModal() {
+      modal.style.display = "block";
+    }
 
-      const username = document.getElementById("username").value.trim();
-      const password = document.getElementById("password").value;
+    window.onclick = (e) => {
+      if (e.target === modal) modal.style.display = "none";
+    };
 
-      const user = users.find((u) => u.username === username && u.password === password);
+    function toggleHidden() {
+      hidden.style.display = hidden.style.display === "block" ? "none" : "block";
+    }
 
-      if (user) {
-        if (user.isAdmin) {
-          localStorage.setItem("adminLoggedIn", "true");
-          window.location.href = "admin.html";
-        } else {
-          localStorage.setItem("currentUser", username);
-          window.location.href = "quiz.html";
-        }
-      } else {
-        const errorMessage = document.getElementById("error-message");
-        errorMessage.style.display = "block";
-      }
+    // Submit Event Registration
+    const scriptURL = "https://script.google.com/macros/s/AKfycbw_zsVE3007bpk6lC05LE7FZV4tHTRH_kuphBoImU9lGrl0F9enofCL_sLWxoul3XEh/exec";
+    const form = document.getElementById("eventForm");
+
+    form.addEventListener("submit", (e) => {
+      e.preventDefault();
+      const formData = new FormData(form);
+
+      fetch(scriptURL, {
+        method: "POST",
+        body: formData
+      })
+      .then(response => {
+        alert("Thank you for registering!");
+        form.reset();
+        modal.style.display = "none";
+      })
+      .catch(error => {
+        alert("There was an error!");
+        console.error("Error!", error.message);
+      });
     });
-  </script>
+</script>
 </body>
 </html>
