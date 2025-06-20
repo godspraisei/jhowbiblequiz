@@ -1,0 +1,329 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>JHOW Admin Dashboard</title>
+
+  <!-- FullCalendar CSS -->
+  <link href="https://cdn.jsdelivr.net/npm/fullcalendar@6.1.8/index.global.min.css" rel="stylesheet" />
+  
+  <!-- FullCalendar JS -->
+  <script src="https://cdn.jsdelivr.net/npm/fullcalendar@6.1.8/index.global.min.js"></script>
+
+  <style>
+    * {
+      box-sizing: border-box;
+      font-family: 'Segoe UI', sans-serif;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      background: #fff;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      min-height: 100vh;
+    }
+
+    .header {
+      width: 100%;
+      background-color: #000;
+      padding: 15px 20px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 15px;
+      color: white;
+      font-size: 1.8em;
+      font-weight: bold;
+      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+    }
+
+    .header img {
+      height: 40px;
+      width: auto;
+    }
+
+    .dashboard-container {
+      background: #f9f9f9;
+      padding: 40px;
+      border-radius: 12px;
+      box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+      text-align: center;
+      max-width: 800px;
+      width: 90%;
+      margin-top: 30px;
+    }
+
+    h1, h2, h3 {
+      color: #222;
+      margin-bottom: 20px;
+    }
+
+    .admin-actions {
+      display: flex;
+      flex-direction: column;
+      gap: 15px;
+      margin-top: 20px;
+    }
+
+    button {
+      padding: 12px 20px;
+      border: none;
+      border-radius: 6px;
+      background-color: #ff6600;
+      color: white;
+      font-size: 1em;
+      cursor: pointer;
+      transition: background 0.3s ease;
+    }
+
+    button:hover {
+      background-color: #e05500;
+    }
+
+    form {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      margin-bottom: 20px;
+    }
+
+    label {
+      display: flex;
+      flex-direction: column;
+      align-items: flex-start;
+      font-weight: bold;
+      font-size: 0.95em;
+    }
+
+    input, textarea {
+      width: 100%;
+      padding: 10px;
+      margin-top: 5px;
+      border: 1px solid #ccc;
+      border-radius: 5px;
+    }
+
+    textarea {
+      resize: vertical;
+    }
+
+    #event-message {
+      margin-top: 10px;
+      color: green;
+      font-weight: bold;
+    }
+
+    .event-card {
+      background: #fff5eb;
+      border-left: 4px solid orange;
+      padding: 10px;
+      margin-bottom: 10px;
+      text-align: left;
+    }
+
+    .event-card button {
+      margin-top: 5px;
+      margin-right: 5px;
+      background: orange;
+      color: white;
+      border: none;
+      padding: 6px 10px;
+      cursor: pointer;
+      border-radius: 4px;
+    }
+
+    #calendar {
+      background: white;
+      padding: 20px;
+      border-radius: 8px;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.06);
+      margin-top: 30px;
+    }
+
+    @media (max-width: 600px) {
+      .header {
+        font-size: 1.4em;
+        flex-direction: column;
+        gap: 10px;
+      }
+
+      .header img {
+        height: 35px;
+      }
+
+      .dashboard-container {
+        padding: 20px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="header">
+    <img src="Images/JHOW.png" alt="JHOW Logo" />
+    Judah's House Of Worship - Admin
+  </div>
+
+  <div class="dashboard-container">
+    <h1 id="greeting">Welcome, Admin!</h1>
+    <div class="admin-actions">
+      <button onclick="location.href='view-submissions.html'">📥 View Submitted Forms</button>
+      <button onclick="logout()">🚪 Log Out</button>
+    </div>
+
+    <section id="event-manager" style="margin-top: 40px;">
+      <h2>Manage Events</h2>
+      <form id="add-event-form">
+        <label>Event Title:
+          <input type="text" name="title" required>
+        </label>
+        <label>Date:
+          <input type="date" name="date" required>
+        </label>
+        <label>Time:
+          <input type="time" name="time" required>
+        </label>
+        <label>Location:
+          <input type="text" name="location" required>
+        </label>
+        <label>Description:
+          <textarea name="description" required></textarea>
+        </label>
+        <button type="submit">Add Event</button>
+      </form>
+      <div id="event-message"></div>
+      <h3>Upcoming Events</h3>
+      <div id="event-list"></div>
+    </section>
+
+    <h3>📅 Calendar View</h3>
+    <div id="calendar"></div>
+  </div>
+
+  <script>
+    if (localStorage.getItem("adminLoggedIn") !== "true") {
+      window.location.href = "admin-login.html";
+    }
+
+    const username = localStorage.getItem("adminUsername") || "Admin";
+    document.getElementById("greeting").textContent = `Welcome, ${username}!`;
+
+    function logout() {
+      localStorage.removeItem("adminLoggedIn");
+      localStorage.removeItem("adminUsername");
+      window.location.href = "admin-login.html";
+    }
+
+    const eventList = document.getElementById("event-list");
+    const calendarContainer = document.getElementById("calendar");
+    const scriptURL = "https://script.google.com/macros/s/AKfycbxv9QD3uaMZJkoL0ChFneBbfpFVDjZZxeBz7rblBSXKkqfXpNcC601ugPczkl2vXlm2/exec";
+
+    function loadEvents() {
+      fetch(scriptURL)
+        .then(res => res.json())
+        .then(events => {
+          eventList.innerHTML = "";
+          events.forEach(event => {
+            const card = document.createElement("div");
+            card.className = "event-card";
+            card.innerHTML = `
+              <strong>${event.Title}</strong><br>
+              ${event.Date} at ${event.Time}<br>
+              ${event.Location}<br>
+              <small>${event.Description}</small><br>
+              <button onclick="editEvent(${event.row}, '${event.Title}', '${event.Date}', '${event.Time}', '${event.Location}', \`${event.Description}\`)">Edit</button>
+              <button onclick="deleteEvent(${event.row})">Delete</button>
+            `;
+            eventList.appendChild(card);
+          });
+
+          renderCalendar(events);
+        });
+    }
+
+    function renderCalendar(events) {
+      const calendar = new FullCalendar.Calendar(calendarContainer, {
+        initialView: 'dayGridMonth',
+        height: 'auto',
+        events: events.map(event => ({
+          title: event.Title,
+          start: event.Date,
+          description: event.Description
+        })),
+        eventDidMount: function (info) {
+          info.el.title = info.event.extendedProps.description;
+        }
+      });
+
+      calendar.render();
+    }
+
+    function deleteEvent(row) {
+      if (!confirm("Are you sure you want to delete this event?")) return;
+
+      fetch(scriptURL, {
+        method: "POST",
+        body: JSON.stringify({ action: "delete", row }),
+        headers: { "Content-Type": "application/json" }
+      }).then(() => loadEvents());
+    }
+
+    function editEvent(row, title, date, time, location, description) {
+      const newTitle = prompt("Edit Title:", title);
+      const newDate = prompt("Edit Date:", date);
+      const newTime = prompt("Edit Time:", time);
+      const newLocation = prompt("Edit Location:", location);
+      const newDesc = prompt("Edit Description:", description);
+
+      fetch(scriptURL, {
+        method: "POST",
+        body: JSON.stringify({
+          action: "edit",
+          row,
+          title: newTitle,
+          date: newDate,
+          time: newTime,
+          location: newLocation,
+          description: newDesc
+        }),
+        headers: { "Content-Type": "application/json" }
+      }).then(() => loadEvents());
+    }
+
+    document.getElementById('add-event-form').addEventListener('submit', function (e) {
+      e.preventDefault();
+
+      const form = e.target;
+      const formData = new FormData(form);
+      const eventData = {};
+
+      formData.forEach((value, key) => {
+        eventData[key] = value;
+      });
+
+      fetch(scriptURL, {
+        method: "POST",
+        body: JSON.stringify(eventData),
+        headers: {
+          "Content-Type": "application/json"
+        }
+      })
+      .then(response => response.text())
+      .then(data => {
+        document.getElementById('event-message').textContent = "Event added successfully!";
+        form.reset();
+        loadEvents();
+      })
+      .catch(error => {
+        console.error("Error:", error);
+        document.getElementById('event-message').textContent = "Failed to add event.";
+      });
+    });
+
+    loadEvents();
+  </script>
+</body>
+</html>
