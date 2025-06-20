@@ -1,0 +1,210 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>View Submissions - JHOW</title>
+  <style>
+    * {
+      box-sizing: border-box;
+      font-family: 'Segoe UI', sans-serif;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      background: #f4f4f4;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+
+    .header {
+      width: 100%;
+      background-color: #000;
+      padding: 15px 20px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 15px;
+      color: white;
+      font-size: 1.8em;
+      font-weight: bold;
+      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+    }
+
+    .header img {
+      height: 40px;
+    }
+
+    .container {
+      background: white;
+      margin-top: 30px;
+      padding: 30px;
+      border-radius: 10px;
+      box-shadow: 0 10px 20px rgba(0,0,0,0.1);
+      max-width: 1000px;
+      width: 95%;
+      overflow-x: auto;
+    }
+
+    h1 {
+      text-align: center;
+      margin-bottom: 20px;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 10px;
+    }
+
+    th, td {
+      border: 1px solid #ccc;
+      padding: 10px;
+      text-align: left;
+    }
+
+    th {
+      background: #ff6600;
+      color: white;
+    }
+
+    .actions {
+      display: flex;
+      justify-content: center;
+      gap: 10px;
+      flex-wrap: wrap;
+      margin-bottom: 15px;
+    }
+
+    button {
+      padding: 10px 20px;
+      background-color: #ff9100;
+      color: white;
+      border: none;
+      border-radius: 5px;
+      font-size: 1em;
+      cursor: pointer;
+    }
+
+    button:hover {
+      background-color: #e05500;
+    }
+
+    #loading {
+      text-align: center;
+      margin-top: 20px;
+      font-style: italic;
+      color: gray;
+    }
+
+    @media (max-width: 600px) {
+      .header {
+        font-size: 1.4em;
+        flex-direction: column;
+        gap: 10px;
+      }
+
+      .header img {
+        height: 35px;
+      }
+
+      table, thead, tbody, th, td, tr {
+        font-size: 0.85em;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="header">
+    <img src="Images/JHOW.png" alt="JHOW Logo" />
+    View Form Submissions
+  </div>
+
+  <div class="container">
+    <h1>Submitted Forms</h1>
+    <div class="actions">
+      <button onclick="loadSubmissions()">🔄 Refresh</button>
+      <button onclick="downloadCSV()">📥 Download</button>
+      <button onclick="location.href='admin-dashboard.html'">⬅️ Back to Dashboard</button>
+    </div>
+    <div id="loading">Loading submissions...</div>
+    <table id="submissions-table" style="display:none;">
+      <thead id="table-head"></thead>
+      <tbody id="table-body"></tbody>
+    </table>
+  </div>
+
+  <script>
+    if (localStorage.getItem("adminLoggedIn") !== "true") {
+      window.location.href = "admin-login.html";
+    }
+
+    const scriptURL = "https://script.google.com/macros/s/AKfycbw_zsVE3007bpk6lC05LE7FZV4tHTRH_kuphBoImU9lGrl0F9enofCL_sLWxoul3XEh/exec";
+    let latestData = [];
+
+    function loadSubmissions() {
+      document.getElementById("loading").style.display = "block";
+      document.getElementById("submissions-table").style.display = "none";
+      fetch(scriptURL)
+        .then(response => response.json())
+        .then(data => {
+          latestData = data;
+          renderTable(data);
+          document.getElementById("loading").style.display = "none";
+          document.getElementById("submissions-table").style.display = "table";
+        })
+        .catch(error => {
+          document.getElementById("loading").textContent = "Failed to load submissions.";
+          console.error(error);
+        });
+    }
+
+    function renderTable(data) {
+      const head = document.getElementById("table-head");
+      const body = document.getElementById("table-body");
+      head.innerHTML = '';
+      body.innerHTML = '';
+
+      if (!data || data.length === 0) {
+        body.innerHTML = `<tr><td colspan="100%">No submissions found.</td></tr>`;
+        return;
+      }
+
+      const keys = Object.keys(data[0]);
+      head.innerHTML = '<tr>' + keys.map(key => `<th>${key}</th>`).join('') + '</tr>';
+
+      data.forEach(entry => {
+        const row = '<tr>' + keys.map(key => `<td>${(entry[key] || '').replace(/</g, "&lt;").replace(/>/g, "&gt;")}</td>`).join('') + '</tr>';
+        body.innerHTML += row;
+      });
+    }
+
+    function downloadCSV() {
+      if (latestData.length === 0) {
+        alert("No data to export.");
+        return;
+      }
+
+      const keys = Object.keys(latestData[0]);
+      let csvContent = '\uFEFF' + keys.join(',') + '\n';
+
+      latestData.forEach(row => {
+        csvContent += keys.map(k => `"${(row[k] || '').replace(/"/g, '""')}"`).join(',') + '\n';
+      });
+
+      const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
+      const link = document.createElement('a');
+      link.href = URL.createObjectURL(blob);
+      link.download = 'jhow-submissions.csv';
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+    }
+
+    window.onload = loadSubmissions;
+  </script>
+</body>
+</html>
